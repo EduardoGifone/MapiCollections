@@ -13,6 +13,17 @@ const routes = [
         path: "crear",
         component: () => import("pages/CreateCollectionPage.vue"),
       },
+      {
+        name: "EditCollectionPage",
+        path: "editar/:id",
+        component: () => import("pages/EditCollectionPage.vue"),
+        props: true,
+      },
+      {
+        name: "CancelledCollectionPage",
+        path: "cancelados",
+        component: () => import("pages/CancelledCollectionPage.vue"),
+      },
     ],
   },
 

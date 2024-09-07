@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <PageTitle
-      title="Lista de pendientes"
+      title="Lista de cancelados"
       :buttons="[
         {
           label: 'Nueva cobranza',
@@ -15,7 +15,7 @@
 
     <div
       class="relative-position"
-      v-for="collection in pending_collections"
+      v-for="collection in cancelled_collections"
       :key="collection.id"
     >
       <q-card class="my-card q-mb-lg">
@@ -40,11 +40,6 @@
             text-color="black"
             :to="`editar/${collection.id}`"
           />
-          <q-btn
-            label="Cancelar"
-            color="primary"
-            @click="confirm(collection.id)"
-          />
         </q-card-actions>
       </q-card>
       <q-icon
@@ -65,7 +60,7 @@ import { useQuasar } from "quasar";
 import PageTitle from "src/components/PageTitle.vue";
 
 defineOptions({
-  name: "PendingCollectionPage",
+  name: "CancelledCollectionPage",
 });
 
 const $q = useQuasar();
@@ -75,27 +70,9 @@ const collections = reactive([]);
 const savedData = $q.localStorage.getItem("collections");
 if (savedData) Object.assign(collections, savedData);
 
-const pending_collections = computed(() => {
-  return collections.filter((collection) => collection.estado == "pendiente");
+const cancelled_collections = computed(() => {
+  return collections.filter((collection) => collection.estado == "cancelado");
 });
-
-function confirm(id) {
-  $q.dialog({
-    title: "Confirmar",
-    message: "Te gustaria marcar esta cobranza como cancelada?",
-    cancel: true,
-    persistent: true,
-  }).onOk(() => {
-    const collection = collections[id];
-    collection.estado = "cancelado";
-    collection.a_cuenta = collection.total;
-    collection.saldo = 0;
-    $q.notify({
-      type: "positive",
-      message: "Cobranza cancelada correctamente.",
-    });
-  });
-}
 
 watch(
   collections,

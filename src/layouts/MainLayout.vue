@@ -49,6 +49,11 @@ const linksList = [
     icon: "cancel",
     link: "PendingCollectionPage",
   },
+  {
+    title: "Cancelados",
+    icon: "check_circle",
+    link: "CancelledCollectionPage",
+  },
 ];
 
 const leftDrawerOpen = ref(false);

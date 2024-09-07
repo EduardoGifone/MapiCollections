@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <PageTitle
-      title="Nueva cobranza"
+      title="Editar cobranza"
       icon="add"
       :buttons="[]"
       class="q-mb-lg"
@@ -110,14 +110,21 @@
 </template>
 
 <script setup>
-import { reactive, ref, watch } from "vue";
+import { reactive, ref, watch, onMounted } from "vue";
 import { date, useQuasar } from "quasar";
 import { useRouter, useRoute } from "vue-router";
 
 import PageTitle from "src/components/PageTitle.vue";
 
 defineOptions({
-  name: "CreateCollectionPage",
+  name: "EditCollectionPage",
+});
+
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
 });
 
 const $q = useQuasar();
@@ -132,10 +139,9 @@ if (savedData) Object.assign(collections, savedData);
 const dateNow = ref(date.formatDate(Date.now(), "YYYY-MM-DD"));
 const costoPin = ref(2.5);
 const options_pago = ["Efectivo", "Yape", "Plin", "Transferencia"];
-const id_calculated = ref(collections.length);
 
 const info = reactive({
-  id: id_calculated,
+  id: 1,
   cliente: "",
   celular: "",
   pines: 0,
@@ -173,10 +179,10 @@ watch(
 function submitForm() {
   try {
     const toPath = route.query.to || "/";
-    collections.push(info);
+    collections.splice(props.id, 1, info);
     $q.notify({
-      type: "warning",
-      message: "Cobranza creada correctamente.",
+      type: "info",
+      message: "Cobranza editada correctamente.",
     });
     router.push(toPath);
   } catch (error) {
@@ -187,4 +193,13 @@ function submitForm() {
     });
   }
 }
+
+function uploadInfo() {
+  const actual = collections[props.id];
+  Object.assign(info, actual);
+}
+
+onMounted(() => {
+  uploadInfo();
+});
 </script>
