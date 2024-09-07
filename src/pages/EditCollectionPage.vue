@@ -31,6 +31,7 @@
         type="number"
         min="0"
         outlined
+        :readonly="isReadOnly()"
         :rules="[(val) => !!val || 'Ingrese la cantidad']"
       />
 
@@ -39,6 +40,7 @@
         label="Costo por pin"
         type="number"
         outlined
+        :readonly="isReadOnly()"
         :rules="[(val) => !!val || 'Ingrese la cantidad']"
       />
 
@@ -57,6 +59,7 @@
         label="A cuenta"
         type="number"
         min="0"
+        :readonly="isReadOnly()"
         class="q-mb-md"
       />
 
@@ -197,6 +200,11 @@ function submitForm() {
 function uploadInfo() {
   const actual = collections[props.id];
   Object.assign(info, actual);
+}
+
+function isReadOnly() {
+  const actual = collections[props.id];
+  return actual.estado == "cancelado";
 }
 
 onMounted(() => {

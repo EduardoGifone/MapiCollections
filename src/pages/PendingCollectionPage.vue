@@ -13,6 +13,24 @@
       class="q-mb-lg"
     />
 
+    <div class="flex flex-center q-mb-lg">
+      <q-chip size="lg" color="primary" text-color="white" icon="attach_money">
+        {{ total_goal }}
+      </q-chip>
+      <q-chip size="lg" color="teal" text-color="white" icon="money_off">
+        {{ saldo_goal }}
+      </q-chip>
+      <q-chip
+        size="lg"
+        class="glossy"
+        color="orange"
+        text-color="white"
+        icon="star"
+      >
+        {{ pines_goal }}
+      </q-chip>
+    </div>
+
     <div
       class="relative-position"
       v-for="collection in pending_collections"
@@ -77,6 +95,24 @@ if (savedData) Object.assign(collections, savedData);
 
 const pending_collections = computed(() => {
   return collections.filter((collection) => collection.estado == "pendiente");
+});
+
+const total_goal = computed(() => {
+  return collections.reduce((total, collection) => {
+    return total + collection.total;
+  }, 0);
+});
+
+const pines_goal = computed(() => {
+  return collections.reduce((total, collection) => {
+    return total + Number(collection.pines);
+  }, 0);
+});
+
+const saldo_goal = computed(() => {
+  return collections.reduce((total, collection) => {
+    return total + collection.saldo;
+  }, 0);
 });
 
 function confirm(id) {
