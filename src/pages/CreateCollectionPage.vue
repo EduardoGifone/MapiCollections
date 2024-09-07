@@ -57,7 +57,16 @@
         label="A cuenta"
         type="number"
         min="0"
-        :rules="[(val) => val]"
+        class="q-mb-md"
+      />
+
+      <q-input
+        outlined
+        v-model="info.saldo"
+        label="Saldo - $"
+        type="number"
+        readonly
+        class="q-mb-md"
       />
 
       <q-select
@@ -102,12 +111,23 @@
 
 <script setup>
 import { reactive, ref, watch } from "vue";
-import { date } from "quasar";
+import { date, useQuasar } from "quasar";
+import { useRouter, useRoute } from "vue-router";
+
 import PageTitle from "src/components/PageTitle.vue";
 
 defineOptions({
   name: "CreateCollectionPage",
 });
+
+const $q = useQuasar();
+const router = useRouter();
+const route = useRoute();
+
+const collections = reactive([]);
+
+const savedData = $q.localStorage.getItem("collections");
+if (savedData) Object.assign(collections, savedData);
 
 const dateNow = ref(date.formatDate(Date.now(), "YYYY-MM-DD"));
 const costoPin = ref(2.5);
@@ -119,23 +139,51 @@ const info = reactive({
   celular: "",
   pines: 0,
   total: 0,
-  a_cuenta: 0,
+  a_cuenta: null,
+  saldo: 0,
   metodo_pago: "",
-  observaciones: "",
+  observaciones: null,
   fecha: dateNow.value,
   estado: "pendiente",
 });
 
-const collections = reactive([]);
-
 watch(
   () => [info.pines, costoPin.value],
-  (newPines) => {
+  () => {
     info.total = info.pines * costoPin.value;
   }
 );
 
+watch(
+  () => [info.a_cuenta, info.total],
+  () => {
+    info.saldo = info.total - Number(info.a_cuenta);
+  }
+);
+
+watch(
+  collections,
+  (value) => {
+    $q.localStorage.set("collections", value);
+  },
+  { deep: true }
+);
+
 function submitForm() {
-  console.log(info);
+  try {
+    const toPath = route.query.to || "/";
+    collections.push(info);
+    $q.notify({
+      type: "positive",
+      message: "Cobranza creada correctamente.",
+    });
+    router.push(toPath);
+  } catch (error) {
+    console.log(error);
+    $q.notify({
+      type: "negative",
+      message: "Ups. Parece que algo anda mal...",
+    });
+  }
 }
 </script>
