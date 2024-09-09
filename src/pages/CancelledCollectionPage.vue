@@ -19,7 +19,7 @@
       :key="collection.id"
     >
       <q-card class="my-card q-mb-lg">
-        <q-card-section class="bg-primary text-white">
+        <q-card-section class="bg-accent text-white">
           <div class="text-h4 text-weight-medium">{{ collection.cliente }}</div>
           <div class="text-subtitle2 row justify-between">
             <div class="row">
@@ -33,6 +33,10 @@
         <q-separator />
 
         <q-card-actions align="right">
+          <p class="q-mb-none q-ml-sm text-subtitle2 text-grey">
+            {{ collection.ubicacion }}
+          </p>
+          <q-space />
           <q-btn
             flat
             label="Editar"

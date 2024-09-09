@@ -82,6 +82,15 @@
 
       <q-input
         outlined
+        v-model="info.ubicacion"
+        label="Ubicacion o referencia"
+        type="textarea"
+        maxlength="255"
+        class="q-mb-md"
+      />
+
+      <q-input
+        outlined
         v-model="info.observaciones"
         label="Observaciones"
         type="textarea"
@@ -89,7 +98,7 @@
         class="q-mb-md"
       />
 
-      <q-input outlined v-model="dateNow" mask="date" class="q-mb-md">
+      <q-input outlined v-model="info.fecha" mask="date" class="q-mb-md">
         <template v-slot:append>
           <q-icon name="event" class="cursor-pointer">
             <q-popup-proxy
@@ -97,7 +106,7 @@
               transition-show="scale"
               transition-hide="scale"
             >
-              <q-date v-model="dateNow">
+              <q-date v-model="info.fecha">
                 <div class="row items-center justify-end">
                   <q-btn v-close-popup label="Close" color="primary" flat />
                 </div>
@@ -139,12 +148,11 @@ const collections = reactive([]);
 const savedData = $q.localStorage.getItem("collections");
 if (savedData) Object.assign(collections, savedData);
 
-const dateNow = ref(date.formatDate(Date.now(), "YYYY-MM-DD"));
 const costoPin = ref(2.5);
 const options_pago = ["Efectivo", "Yape", "Plin", "Transferencia"];
 
 const info = reactive({
-  id: 1,
+  id: 0,
   cliente: "",
   celular: "",
   pines: 0,
@@ -152,8 +160,9 @@ const info = reactive({
   a_cuenta: null,
   saldo: 0,
   metodo_pago: "",
+  ubicacion: "",
   observaciones: null,
-  fecha: dateNow.value,
+  fecha: null,
   estado: "pendiente",
 });
 

@@ -79,6 +79,15 @@
 
       <q-input
         outlined
+        v-model="info.ubicacion"
+        label="Ubicacion o referencia"
+        type="textarea"
+        maxlength="255"
+        class="q-mb-md"
+      />
+
+      <q-input
+        outlined
         v-model="info.observaciones"
         label="Observaciones"
         type="textarea"
@@ -86,7 +95,7 @@
         class="q-mb-md"
       />
 
-      <q-input outlined v-model="dateNow" mask="date" class="q-mb-md">
+      <q-input outlined v-model="info.fecha" mask="date" class="q-mb-md">
         <template v-slot:append>
           <q-icon name="event" class="cursor-pointer">
             <q-popup-proxy
@@ -94,7 +103,7 @@
               transition-show="scale"
               transition-hide="scale"
             >
-              <q-date v-model="dateNow">
+              <q-date v-model="info.fecha">
                 <div class="row items-center justify-end">
                   <q-btn v-close-popup label="Close" color="primary" flat />
                 </div>
@@ -138,11 +147,12 @@ const info = reactive({
   id: id_calculated,
   cliente: "",
   celular: "",
-  pines: 0,
-  total: 0,
-  a_cuenta: null,
-  saldo: 0,
-  metodo_pago: "",
+  pines: null,
+  total: null,
+  a_cuenta: 0,
+  saldo: null,
+  metodo_pago: "Efectivo",
+  ubicacion: "",
   observaciones: null,
   fecha: dateNow.value,
   estado: "pendiente",
